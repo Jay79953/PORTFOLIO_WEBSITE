@@ -3,304 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jayavanth | Data Science & AI Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <title>Askify | Instant Research Answers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        body { margin: 0; background-color: #020617; color: white; overflow: hidden; font-family: 'Inter', sans-serif; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
-        
-        #content-page {
-            position: fixed; top: 100%; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(30px);
-            z-index: 2000; overflow-y: auto; padding: 100px 10% 60px;
-            transition: top 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #050614;
+            --bg-card: #0d1127;
+            --primary-blue: #70a0ff;
+            --accent-blue: #2a56a9;
+            --text-main: #ffffff;
+            --text-dim: #9499b0;
+            --glow: rgba(112, 160, 255, 0.3);
         }
-        #content-page.active { top: 0; }
-        .close-btn { position: fixed; top: 40px; right: 40px; cursor: pointer; font-size: 0.8rem; letter-spacing: 0.3em; color: #3b82f6; z-index: 2100; font-weight: bold; }
 
-        /* --- INSANE CERTIFICATE MODAL --- */
-        #cert-modal {
-            position: fixed; inset: 0; z-index: 3000; display: none;
-            align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(20px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        #cert-modal.active { display: flex; animation: modalFadeIn 0.4s forwards; }
-        
-        #cert-img-wrapper {
-            max-width: 85%; max-height: 85%; overflow: auto; border-radius: 8px;
-            scrollbar-width: thin; scrollbar-color: #3b82f6 #020617;
-        }
-        #cert-img-wrapper::-webkit-scrollbar { width: 8px; }
-        #cert-img-wrapper::-webkit-scrollbar-track { background: #020617; }
-        #cert-img-wrapper::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
 
-        #cert-img-container { 
-            transform: scale(0.3) rotateY(30deg) rotateX(15deg); opacity: 0;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        #cert-modal.active #cert-img-container { transform: scale(1) rotateY(0deg) rotateX(0deg); opacity: 1; }
 
-        .download-btn {
-            position: fixed; top: 40px; right: 140px; cursor: pointer; 
-            font-size: 0.7rem; letter-spacing: 0.2em; color: white; border: 1px solid white;
-            padding: 8px 16px; font-weight: bold; text-transform: uppercase; z-index: 3100;
-            animation: whiteBlink 1.5s infinite;
+        /* --- ANIMATIONS --- */
+        @keyframes rotateLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        @keyframes whiteBlink { 0%, 100% { opacity: 1; box-shadow: 0 0 10px white; } 50% { opacity: 0.3; box-shadow: 0 0 0px white; } }
-        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- HERO & MENU --- */
-        .main-hero-container {
-            position: absolute; top: 50%; left: 45%; transform: translate(-100%, -50%);
-            display: flex; flex-direction: column; align-items: flex-start; pointer-events: none; z-index: 10;
+        @keyframes orbPulse {
+            0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 50px var(--glow); }
+            100% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 100px var(--primary-blue); }
         }
-        .sliding-hero-group {
-            display: flex; flex-direction: column; align-items: flex-start; opacity: 0;
-            animation: heroSlideIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-        }
-        .profile-photo-hero {
-            width: 350px; height: auto; border-radius: 4px; margin-bottom: 20px;
-            box-shadow: 0 0 50px rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        .sliding-word {
-            white-space: nowrap; font-size: 6rem; font-weight: 900; text-transform: uppercase;
-            letter-spacing: -0.05em; background: linear-gradient(180deg, #fff 0%, #3b82f6 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9;
-        }
-        .subtitle-label {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; letter-spacing: 0.25em;
-            text-transform: uppercase; padding-right; color: #3b82f6; margin-top: 12px; white-space: nowrap; opacity: 0.9;
-        }
-        @keyframes heroSlideIn { 0% { transform: translateX(-150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 
-        .menu-steps {
-            position: absolute; top: 100px; right: 0; display: flex; flex-direction: column; gap: 60px;
-            align-items: flex-end; padding-right: 8%; z-index: 1000;
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-15px); }
         }
-        .step-wrapper { opacity: 0; pointer-events: auto; }
-        .step-item {
-            position: relative; font-size: 2.8rem; font-weight: 900; text-transform: uppercase;
-            color: rgba(59, 130, 246, 0.4); cursor: pointer; display: inline-block; padding-bottom: 8px; transition: color 0.3s ease;
-        }
-        .step-item::after {
-            content: ""; position: absolute; bottom: 0; right: 0; width: 0; height: 4px;
-            background: #fbbf24; box-shadow: 0 0 15px #fbbf24, 0 0 30px #f59e0b;
-            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .step-item:hover { color: #fbbf24 !important; animation: textShiver 0.15s infinite; }
-        .step-item:hover::after { width: 100%; }
 
-        @keyframes textShiver { 0% { transform: scale(1.05) translate(0, 0); } 50% { transform: scale(1.05) translate(2px, -1px); } 100% { transform: scale(1.05) translate(0, 0); } }
-        @keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .sw-1 { animation: slideInRight 0.8s ease-out 1.2s forwards; }
-        .sw-2 { animation: slideInRight 0.8s ease-out 1.4s forwards; margin-right: 80px; }
-        .sw-3 { animation: slideInRight 0.8s ease-out 1.6s forwards; margin-right: 160px; }
-        .sw-4 { animation: slideInRight 0.8s ease-out 1.8s forwards; margin-right: 240px; }
+        /* --- NAVIGATION --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 6, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
 
-        .profile-img-inner { width: 280px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.5); }
-        .accent-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); padding: 20px; border-radius: 8px; transition: 0.3s; cursor: pointer; }
-        .accent-box:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); transform: translateY(-5px); }
-        .github-icon { width: 24px; height: 24px; filter: invert(1); opacity: 0.6; }
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            animation: rotateLogo 8s linear infinite;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary-blue); }
+
+        .btn-signup {
+            background: var(--primary-blue);
+            color: var(--bg-dark);
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-signup:hover { background: white; transform: translateY(-2px); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 8% 50px 8%;
+            background: radial-gradient(circle at 80% 20%, #161b3d 0%, var(--bg-dark) 60%);
+        }
+
+        .hero-container {
+            display: flex;
+            flex-wrap: wrap; /* PREVENTS OVERLAP ON DEPLOYMENT */
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            gap: 60px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin-bottom: 35px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .btn-main {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-filled { background: var(--primary-blue); color: var(--bg-dark); }
+        .btn-outline { background: transparent; border: 1px solid var(--accent-blue); color: white; }
+
+        /* --- ASKIFY WIDGET (Bottom Left Look) --- */
+        .askify-widget {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        .widget-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary-blue);
+        }
+
+        .widget-input {
+            display: flex;
+            background: var(--bg-dark);
+            border-radius: 6px;
+            padding: 5px 10px;
+            align-items: center;
+        }
+
+        .widget-input input {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px;
+            width: 100%;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .widget-send {
+            background: var(--primary-blue);
+            color: var(--bg-dark);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* --- HERO VISUAL (The Ball with 'A') --- */
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 320px;
+        }
+
+        .orb-container {
+            position: relative;
+            width: clamp(300px, 40vw, 500px);
+            height: clamp(300px, 40vw, 500px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .orb {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(20px);
+            animation: orbPulse 4s ease-in-out infinite alternate;
+        }
+
+        .orb-glass {
+            position: relative;
+            width: 70%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .letter-a {
+            font-size: clamp(8rem, 15vw, 12rem);
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff 30%, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--primary-blue));
+        }
+
+        /* --- RESPONSIVENESS --- */
+        @media (max-width: 900px) {
+            .navbar { padding: 1rem 5%; }
+            .nav-links { display: none; } /* Hide links on mobile for clarity */
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            .hero-text {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .cta-group { justify-content: center; }
+            .askify-widget { margin: 0 auto; }
+        }
     </style>
 </head>
 <body>
 
-    <script>
-        // THREE.js Particle System
-        let scene, camera, renderer, particles;
-        let mouseX = 0, mouseY = 0, isMoving = false;
-
-        function init() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-            const geo = new THREE.BufferGeometry();
-            const points = [];
-            for(let i=0; i<6500; i++) points.push((Math.random()-0.5)*20, (Math.random()-0.5)*20, (Math.random()-0.5)*15);
-            geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-            
-            // COLOR UPDATED TO WHITE (0xffffff)
-            particles = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.015, transparent: true, opacity: 0.5 }));
-            
-            scene.add(particles);
-            document.addEventListener('mousemove', (e) => {
-                isMoving = true;
-                mouseX = (e.clientX - window.innerWidth/2) * 0.0007;
-                mouseY = (e.clientY - window.innerHeight/2) * 0.0007;
-                clearTimeout(window.idleT);
-                window.idleT = setTimeout(() => isMoving = false, 2000);
-            });
-        }
-        function animate() {
-            requestAnimationFrame(animate);
-            if(isMoving) {
-                particles.rotation.y += 0.05 * (mouseX - particles.rotation.y);
-                particles.rotation.x += 0.05 * (mouseY - particles.rotation.x);
-            } else {
-                particles.rotation.y += 0.001;
-                particles.rotation.x += 0.0005;
-            }
-            renderer.render(scene, camera);
-        }
-        init(); animate();
-
-        const resumeData = {
-            about: `
-                <div class="flex flex-col lg:flex-row gap-16 items-start">
-                    <div class="shrink-0 mx-auto lg:mx-0">
-                        <img src="1.png" class="profile-img-inner" alt="Jayavanth">
-                        <div class="mt-8 space-y-2 text-sm tracking-wide">
-                            <p class="text-blue-400 font-bold uppercase tracking-widest">Contact Information</p>
-                            <p class="text-gray-300">jayawanthappikatla@gmail.com</p>
-                            <p class="text-gray-300">+91 9346573380</p>
-                            <p class="text-gray-300">Tenali, AP, India</p>
-                        </div>
-                    </div>
-                    <div class="flex-1">
-                        <h1 class="text-6xl font-black mb-8 text-blue-500 uppercase tracking-tighter">About Me</h1>
-                        <p class="text-xl text-gray-200 leading-relaxed mb-8 italic">"Blending artistry with technical innovation to solve real-world problems through Data Science and AI Automation."</p>
-                        <p class="text-lg text-gray-400 leading-loose mb-10">As a Computer Science specialist at Vignan University, I am deeply passionate about data science and the creation of intelligent, next-generation digital solutions.</p>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="accent-box"><h4 class="text-blue-400 font-bold text-xs uppercase mb-2">B.Tech - CS</h4><p class="text-white">Vignan University | CGPA: 8.2</p></div>
-                            <div class="accent-box"><h4 class="text-blue-400 font-bold text-xs uppercase mb-2">Intermediate</h4><p class="text-white">Narayana College | Score: 928</p></div>
-                            <div class="accent-box md:col-span-2 flex justify-between items-center border-blue-500/50">
-                                <div><h4 class="text-blue-400 font-bold text-xs uppercase mb-2">10th Class</h4><p class="text-white">Montessori High School</p></div>
-                                <p class="text-blue-400 text-3xl font-black">10.0 CGPA</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>`,
-            projects: `
-                <h1 class="text-6xl font-black mb-10 text-blue-500 uppercase tracking-tighter">Projects</h1>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="accent-box border-l-4 border-l-blue-500 flex flex-col justify-between" onclick="window.open('https://github.com/Jay79953/Askiff_Main_Logic.git', '_blank')">
-                        <div><h3 class="text-2xl font-bold mb-2">Askify: Smart AI Assistant</h3><p class="text-gray-400 text-sm mb-4">Commercial success around 8k+ earned by AI Assistant.</p></div>
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="github-icon self-end">
-                    </div>
-                    <div class="accent-box border-l-4 border-l-blue-500 flex flex-col justify-between" onclick="window.open('https://github.com/Jay79953/Price_Tracker.git', '_blank')">
-                        <div><h3 class="text-2xl font-bold mb-2">Amazon Price Tracker</h3><p class="text-gray-400 text-sm mb-4">AWS automation with real-time Twilio alerts.</p></div>
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="github-icon self-end">
-                    </div>
-                    <div class="accent-box border-l-4 border-l-blue-500 flex flex-col justify-between" onclick="window.open('https://github.com/Jay79953/CodeChef-Rating-Tracker-Chrome-Extension.git', '_blank')">
-                        <div><h3 class="text-2xl font-bold mb-2">CodeChef Rating Tracker Chrome Extension</h3><p class="text-gray-400 text-sm mb-4">Chrome extension using parallel processing to reduce user data fetch time by 60%.</p></div>
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="github-icon self-end">
-                    </div>
-                    <div class="accent-box border-l-4 border-l-blue-500 flex flex-col justify-between" onclick="window.open('https://github.com/Jay79953/Secure_Attendance_App.git', '_blank')">
-                        <div><h3 class="text-2xl font-bold mb-2">VeriAttend Pro</h3><p class="text-gray-400 text-sm mb-4">Achieved 95% face recognition accuracy using Deep Learning and Geofencing within a 10m radius.</p></div>
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="github-icon self-end">
-                    </div>
-                </div>`,
-            certs: `
-                <h1 class="text-6xl font-black mb-10 text-blue-500 uppercase tracking-tighter">Certifications</h1>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="p-6 accent-box border-l-4 border-l-yellow-500" onclick="showCert('image_0da3c1.png')">
-                        <div class="flex justify-between items-start">
-                            <b>The Data Science Course 2025</b>
-                            <span class="text-[10px] bg-blue-900/30 px-2 py-1 rounded text-blue-300">UDEMY</span>
-                        </div>
-                        <p class="text-blue-400 text-xs mt-1">Complete Data Science Bootcamp</p>
-                        <p class="text-gray-500 text-[10px] mt-2 font-mono">ID: UC-7a1c4998-6f73-40de-9954-495c2aacdb88</p>
-                    </div>
-
-                    <div class="p-6 accent-box border-l-4 border-l-yellow-500" onclick="showCert('Screenshot 2025-10-30 204807.jpg')">
-                        <div class="flex justify-between items-start">
-                            <b>Oracle Cloud Infrastructure 2025</b>
-                            <span class="text-[10px] bg-blue-900/30 px-2 py-1 rounded text-blue-300">ORACLE</span>
-                        </div>
-                        <p class="text-blue-400 text-xs mt-1">Certified Data Science Professional</p>
-                        <p class="text-gray-500 text-[10px] mt-2 font-mono">Professional Certification</p>
-                    </div>
-
-                    <div class="p-6 accent-box border-l-4 border-l-yellow-500" onclick="showCert('Forage.jpg')">
-                        <div class="flex justify-between items-start">
-                            <b>British Airways Simulation</b>
-                            <span class="text-[10px] bg-blue-900/30 px-2 py-1 rounded text-blue-300">FORAGE</span>
-                        </div>
-                        <p class="text-blue-400 text-xs mt-1">Data Science Experience</p>
-                        <p class="text-gray-500 text-[10px] mt-2 font-mono">February 7th, 2025</p>
-                    </div>
-
-                    <div class="p-6 accent-box border-l-4 border-l-yellow-500" onclick="showCert('Accenture.jpg')">
-                        <div class="flex justify-between items-start">
-                            <b>Accenture Simulation</b>
-                            <span class="text-[10px] bg-blue-900/30 px-2 py-1 rounded text-blue-300">FORAGE</span>
-                        </div>
-                        <p class="text-blue-400 text-xs mt-1">Data Analytics & Visualization</p>
-                        <p class="text-gray-500 text-[10px] mt-2 font-mono">December 20th, 2024</p>
-                    </div>
-                </div>`,
-            automations: `
-                <h1 class="text-6xl font-black mb-6 text-blue-500 uppercase tracking-tighter">Special Automations</h1>
-                <p class="text-gray-400 text-xl">Custom AI lab deployments pending update.</p>
-                <div class="mt-10 w-full h-1 bg-blue-900/20 rounded-full overflow-hidden"><div class="h-full bg-blue-500 animate-pulse" style="width: 30%"></div></div>`
-        };
-
-        function openPage(section) {
-            document.getElementById('page-inner-content').innerHTML = resumeData[section];
-            document.getElementById('content-page').classList.add('active');
-        }
-        function closePage() { document.getElementById('content-page').classList.remove('active'); }
-
-        let currentCertPath = "";
-
-        function showCert(imgSrc) {
-            currentCertPath = imgSrc;
-            const modal = document.getElementById('cert-modal');
-            const img = document.getElementById('modal-img');
-            img.src = imgSrc;
-            modal.classList.add('active');
-        }
-
-        function closeCert() { document.getElementById('cert-modal').classList.remove('active'); }
-
-        function downloadCert() {
-            if(!currentCertPath) return;
-            const link = document.createElement('a');
-            link.href = currentCertPath;
-            link.download = currentCertPath;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
-
-    <div class="main-hero-container">
-        <div class="sliding-hero-group">
-            <img src="1.png" alt="Jayavanth" class="profile-photo-hero">
-            <h1 class="sliding-word">Jayavanth</h1>
-            <span class="subtitle-label">Data Science & AI Automation</span>
+    <nav class="navbar">
+        <a href="#" class="logo-box">
+            <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#70a0ff" stroke-width="8" stroke-dasharray="200"/>
+                <path d="M50 20V50L70 70" stroke="#70a0ff" stroke-width="8" stroke-linecap="round"/>
+            </svg>
+            <span class="logo-text">ASKIFY</span>
+        </a>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
         </div>
-    </div>
+        <a href="#" class="btn-signup">Sign Up</a>
+    </nav>
 
-    <div class="menu-steps">
-        <div class="step-wrapper sw-1"><div class="step-item" onclick="openPage('about')">About me</div></div>
-        <div class="step-wrapper sw-2"><div class="step-item" onclick="openPage('projects')">Projects</div></div>
-        <div class="step-wrapper sw-3"><div class="step-item" onclick="openPage('certs')">Certifications</div></div>
-        <div class="step-wrapper sw-4"><div class="step-item" onclick="openPage('automations')">Automations</div></div>
-    </div>
+    <main class="hero">
+        <div class="hero-container">
+            
+            <div class="hero-text">
+                <h1>Instant Answers for Curious Minds</h1>
+                <p>The AI research assistant that lives on your desktop. Get cited answers and data analysis without leaving your browser.</p>
+                
+                <div class="cta-group">
+                    <button class="btn-main btn-filled">Get Started Free</button>
+                    <button class="btn-main btn-outline">Watch Demo</button>
+                </div>
 
-    <div id="content-page">
-        <div class="close-btn" onclick="closePage()">[ CLOSE ]</div>
-        <div id="page-inner-content"></div>
-    </div>
-
-    <div id="cert-modal">
-        <div class="download-btn" onclick="downloadCert()">Download</div>
-        <div class="close-btn" onclick="closeCert()">[ DISMISS ]</div>
-        
-        <div id="cert-img-wrapper">
-            <div id="cert-img-container">
-                <img id="modal-img" src="" class="w-full h-auto shadow-2xl border border-blue-500/30">
+                <div class="askify-widget">
+                    <div class="widget-top">
+                        <i class="fas fa-magic"></i>
+                        <span>Askify Research Assistant</span>
+                    </div>
+                    <div class="widget-input">
+                        <input type="text" placeholder="Ask anything about this page...">
+                        <button class="widget-send">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <div class="hero-visual">
+                <div class="orb-container">
+                    <div class="orb"></div>
+                    <div class="orb-glass">
+                        <span class="letter-a">A</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </main>
 
 </body>
 </html>
