@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Askify | Instant Research Answers</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Portfolio | Creative Developer & Researcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        /* --- CSS VARIABLES & RESET --- */
         :root {
             --bg-dark: #050614;
             --bg-card: #0d1127;
@@ -16,274 +15,113 @@
             --accent-blue: #2a56a9;
             --text-main: #ffffff;
             --text-dim: #9499b0;
-            --glow: rgba(112, 160, 255, 0.3);
+            --glow: rgba(112, 160, 255, 0.2);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
             overflow-x: hidden;
         }
 
         /* --- ANIMATIONS --- */
-        @keyframes rotateLogo {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes orbPulse {
-            0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 50px var(--glow); }
-            100% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 100px var(--primary-blue); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-15px); }
+        @keyframes rotateLogo { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes orbPulse { 
+            0% { transform: scale(1); opacity: 0.7; } 
+            100% { transform: scale(1.1); opacity: 1; } 
         }
 
         /* --- NAVIGATION --- */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 8%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(5, 6, 20, 0.8);
-            backdrop-filter: blur(12px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 8%; position: fixed; width: 100%; top: 0; z-index: 1000;
+            background: rgba(5, 6, 20, 0.8); backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-svg {
-            width: 32px;
-            height: 32px;
-            animation: rotateLogo 8s linear infinite;
-        }
-
-        .logo-text {
-            font-weight: 800;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: 0.3s;
-        }
-
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
+        .logo-svg { width: 32px; height: 32px; animation: rotateLogo 10s linear infinite; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
         .nav-links a:hover { color: var(--primary-blue); }
-
-        .btn-signup {
-            background: var(--primary-blue);
-            color: var(--bg-dark);
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .btn-signup:hover { background: white; transform: translateY(-2px); }
 
         /* --- HERO SECTION --- */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 8% 50px 8%;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 120px 8% 80px 8%;
             background: radial-gradient(circle at 80% 20%, #161b3d 0%, var(--bg-dark) 60%);
         }
 
         .hero-container {
-            display: flex;
-            flex-wrap: wrap; /* PREVENTS OVERLAP ON DEPLOYMENT */
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1200px;
-            gap: 60px;
+            display: flex; flex-wrap: wrap; align-items: center;
+            justify-content: space-between; width: 100%; max-width: 1200px; gap: 40px;
         }
 
-        .hero-text {
-            flex: 1;
-            min-width: 320px;
-        }
+        .hero-text { flex: 1; min-width: 320px; }
+        .hero-text h2 { color: var(--primary-blue); font-size: 1.1rem; letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase; }
+        .hero-text h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px; font-weight: 800; }
+        .hero-text p { font-size: 1.1rem; color: var(--text-dim); max-width: 500px; margin-bottom: 35px; }
 
-        .hero-text h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            line-height: 1.1;
-            margin-bottom: 20px;
-            font-weight: 800;
-        }
+        .social-icons { display: flex; gap: 20px; margin-bottom: 30px; }
+        .social-icons a { color: var(--text-dim); font-size: 1.5rem; transition: 0.3s; }
+        .social-icons a:hover { color: var(--primary-blue); transform: translateY(-3px); }
 
-        .hero-text p {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            max-width: 500px;
-            margin-bottom: 35px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 50px;
-        }
-
-        .btn-main {
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            border: none;
-        }
-
-        .btn-filled { background: var(--primary-blue); color: var(--bg-dark); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent-blue); color: white; }
-
-        /* --- ASKIFY WIDGET (Bottom Left Look) --- */
-        .askify-widget {
-            background: var(--bg-card);
-            border: 1px solid var(--accent-blue);
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 340px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: float 3s ease-in-out infinite alternate;
-        }
-
-        .widget-top {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--primary-blue);
-        }
-
-        .widget-input {
-            display: flex;
-            background: var(--bg-dark);
-            border-radius: 6px;
-            padding: 5px 10px;
-            align-items: center;
-        }
-
-        .widget-input input {
-            background: none;
-            border: none;
-            color: white;
-            padding: 8px;
-            width: 100%;
-            outline: none;
-            font-size: 0.85rem;
-        }
-
-        .widget-send {
-            background: var(--primary-blue);
-            color: var(--bg-dark);
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* --- HERO VISUAL (The Ball with 'A') --- */
-        .hero-visual {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 320px;
-        }
-
+        /* --- THE GLOWING ORB --- */
+        .hero-visual { flex: 1; display: flex; justify-content: center; align-items: center; min-width: 320px; }
         .orb-container {
-            position: relative;
-            width: clamp(300px, 40vw, 500px);
-            height: clamp(300px, 40vw, 500px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative; width: clamp(280px, 35vw, 450px); height: clamp(280px, 35vw, 450px);
+            display: flex; justify-content: center; align-items: center;
         }
-
-        .orb {
-            position: absolute;
-            width: 80%;
-            height: 80%;
+        .orb-bg {
+            position: absolute; width: 100%; height: 100%;
             background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(20px);
-            animation: orbPulse 4s ease-in-out infinite alternate;
+            border-radius: 50%; filter: blur(30px); animation: orbPulse 5s ease-in-out infinite alternate;
         }
-
         .orb-glass {
-            position: relative;
-            width: 70%;
-            height: 70%;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
+            position: relative; width: 70%; height: 70%; background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 2;
+        }
+        .letter-a {
+            font-size: clamp(6rem, 12vw, 10rem); font-weight: 900;
+            background: linear-gradient(180deg, #fff 30%, var(--primary-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--primary-blue));
         }
 
-        .letter-a {
-            font-size: clamp(8rem, 15vw, 12rem);
-            font-weight: 900;
-            background: linear-gradient(180deg, #fff 30%, var(--primary-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px var(--primary-blue));
+        /* --- PROJECTS SECTION --- */
+        .section-title { text-align: center; padding: 60px 8% 40px 8%; font-size: 2rem; }
+        .section-title span { color: var(--primary-blue); }
+
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; padding: 0 8% 80px 8%; max-width: 1200px; margin: 0 auto;
+        }
+
+        .project-card {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            padding: 25px; border-radius: 16px; transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .project-card:hover { 
+            transform: translateY(-10px); border-color: var(--primary-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .project-card h3 { margin-bottom: 10px; font-size: 1.4rem; }
+        .project-card p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 20px; }
+        .tag { 
+            display: inline-block; background: rgba(112, 160, 255, 0.1); 
+            color: var(--primary-blue); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
         }
 
         /* --- RESPONSIVENESS --- */
         @media (max-width: 900px) {
-            .navbar { padding: 1rem 5%; }
-            .nav-links { display: none; } /* Hide links on mobile for clarity */
-            .hero-container {
-                flex-direction: column;
-                text-align: center;
-                gap: 30px;
-            }
-            .hero-text {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            .cta-group { justify-content: center; }
-            .askify-widget { margin: 0 auto; }
+            .nav-links { display: none; }
+            .hero-container { flex-direction: column; text-align: center; }
+            .hero-text { display: flex; flex-direction: column; align-items: center; }
+            .social-icons { justify-content: center; }
         }
     </style>
 </head>
@@ -292,57 +130,81 @@
     <nav class="navbar">
         <a href="#" class="logo-box">
             <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" stroke="#70a0ff" stroke-width="8" stroke-dasharray="200"/>
-                <path d="M50 20V50L70 70" stroke="#70a0ff" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="45" stroke="#70a0ff" stroke-width="8" />
+                <path d="M30 70L50 30L70 70" stroke="#70a0ff" stroke-width="8" stroke-linecap="round"/>
             </svg>
-            <span class="logo-text">ASKIFY</span>
+            <span class="logo-text">DESIGNER</span>
         </a>
         <div class="nav-links">
-            <a href="#">Features</a>
-            <a href="#">Solutions</a>
-            <a href="#">Pricing</a>
-            <a href="#">About</a>
+            <a href="#home">Home</a>
+            <a href="#work">Work</a>
+            <a href="#skills">Skills</a>
+            <a href="mailto:your@email.com" class="btn-signup">Contact</a>
         </div>
-        <a href="#" class="btn-signup">Sign Up</a>
     </nav>
 
-    <main class="hero">
+    <main id="home" class="hero">
         <div class="hero-container">
-            
             <div class="hero-text">
-                <h1>Instant Answers for Curious Minds</h1>
-                <p>The AI research assistant that lives on your desktop. Get cited answers and data analysis without leaving your browser.</p>
+                <h2>Product Designer & Dev</h2>
+                <h1>Crafting the future of <span>Research.</span></h1>
+                <p>I build intelligent digital tools like <b>Askify</b> that bridge the gap between complex data and human curiosity.</p>
                 
-                <div class="cta-group">
-                    <button class="btn-main btn-filled">Get Started Free</button>
-                    <button class="btn-main btn-outline">Watch Demo</button>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
 
-                <div class="askify-widget">
-                    <div class="widget-top">
-                        <i class="fas fa-magic"></i>
-                        <span>Askify Research Assistant</span>
-                    </div>
-                    <div class="widget-input">
-                        <input type="text" placeholder="Ask anything about this page...">
-                        <button class="widget-send">
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
+                <a href="#work" style="text-decoration: none;">
+                    <button style="padding: 12px 25px; border-radius: 8px; background: var(--primary-blue); border:none; font-weight:700; cursor:pointer;">View My Work</button>
+                </a>
             </div>
 
             <div class="hero-visual">
                 <div class="orb-container">
-                    <div class="orb"></div>
+                    <div class="orb-bg"></div>
                     <div class="orb-glass">
                         <span class="letter-a">A</span>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
+
+    <section id="work">
+        <h2 class="section-title">Selected <span>Projects</span></h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="tag">AI Tool</div>
+                <h3>Askify AI</h3>
+                <p>An instant research assistant that lives on the desktop. Provides cited answers for students and researchers.</p>
+                <div style="display: flex; gap: 10px;">
+                    <span style="font-size: 12px; color: var(--primary-blue);">React</span>
+                    <span style="font-size: 12px; color: var(--primary-blue);">Python</span>
+                    <span style="font-size: 12px; color: var(--primary-blue);">LLM</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="tag">Web Design</div>
+                <h3>Linear Redesign</h3>
+                <p>A conceptual dark-mode interface designed for high-performance engineering teams.</p>
+                <div style="display: flex; gap: 10px;">
+                    <span style="font-size: 12px; color: var(--primary-blue);">Figma</span>
+                    <span style="font-size: 12px; color: var(--primary-blue);">Next.js</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="tag">Data Viz</div>
+                <h3>Neural Map</h3>
+                <p>Interactive 3D visualization of research citations and knowledge clusters.</p>
+                <div style="display: flex; gap: 10px;">
+                    <span style="font-size: 12px; color: var(--primary-blue);">Three.js</span>
+                    <span style="font-size: 12px; color: var(--primary-blue);">D3.js</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </body>
 </html>
