@@ -9,10 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
     
     <style>
-        body { margin: 0; background-color: #020617; color: white; overflow-x: hidden; overflow-y: auto; font-family: 'Inter', sans-serif; }
-        canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+        body { margin: 0; background-color: #020617; color: white; overflow: hidden; font-family: 'Inter', sans-serif; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
         
-        /* --- CONTENT PAGE OVERLAY --- */
         #content-page {
             position: fixed; top: 100%; left: 0; width: 100%; height: 100%;
             background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(30px);
@@ -59,20 +58,16 @@
             position: absolute; top: 50%; left: 45%; transform: translate(-100%, -50%);
             display: flex; flex-direction: column; align-items: flex-start; pointer-events: none; z-index: 10;
         }
-        .main-hero-container {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-left: 8%;
-}
-
+        .sliding-hero-group {
+            display: flex; flex-direction: column; align-items: flex-start; opacity: 0;
+            animation: heroSlideIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+        }
         .profile-photo-hero {
             width: 350px; height: auto; border-radius: 4px; margin-bottom: 20px;
             box-shadow: 0 0 50px rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.3);
         }
         .sliding-word {
-            white-space: nowrap; font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; text-transform: uppercase;
+            white-space: nowrap; font-size: 6rem; font-weight: 900; text-transform: uppercase;
             letter-spacing: -0.05em; background: linear-gradient(180deg, #fff 0%, #3b82f6 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9;
         }
@@ -82,17 +77,13 @@
         }
         @keyframes heroSlideIn { 0% { transform: translateX(-150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 
-        .main-hero-container {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-left: 8%;
-}
-
+        .menu-steps {
+            position: absolute; top: 100px; right: 0; display: flex; flex-direction: column; gap: 60px;
+            align-items: flex-end; padding-right: 8%; z-index: 1000;
+        }
         .step-wrapper { opacity: 0; pointer-events: auto; }
         .step-item {
-            position: relative; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; text-transform: uppercase;
+            position: relative; font-size: 2.8rem; font-weight: 900; text-transform: uppercase;
             color: rgba(59, 130, 246, 0.4); cursor: pointer; display: inline-block; padding-bottom: 8px; transition: color 0.3s ease;
         }
         .step-item::after {
@@ -313,5 +304,3 @@
 
 </body>
 </html>
-
-
