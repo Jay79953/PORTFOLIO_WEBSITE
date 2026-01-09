@@ -10,7 +10,7 @@
     
     <style>
         body { margin: 0; background-color: #020617; color: white; overflow-x: hidden; overflow-y: auto; font-family: 'Inter', sans-serif; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
         
         /* --- CONTENT PAGE OVERLAY --- */
         #content-page {
@@ -72,7 +72,7 @@
             box-shadow: 0 0 50px rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.3);
         }
         .sliding-word {
-            white-space: nowrap; font-size: 6rem; font-weight: 900; text-transform: uppercase;
+            white-space: nowrap; font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; text-transform: uppercase;
             letter-spacing: -0.05em; background: linear-gradient(180deg, #fff 0%, #3b82f6 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9;
         }
@@ -92,7 +92,7 @@
 
         .step-wrapper { opacity: 0; pointer-events: auto; }
         .step-item {
-            position: relative; font-size: 2.8rem; font-weight: 900; text-transform: uppercase;
+            position: relative; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; text-transform: uppercase;
             color: rgba(59, 130, 246, 0.4); cursor: pointer; display: inline-block; padding-bottom: 8px; transition: color 0.3s ease;
         }
         .step-item::after {
@@ -313,4 +313,5 @@
 
 </body>
 </html>
+
 
